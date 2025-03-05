@@ -141,8 +141,12 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
         }
 
+        HttpCookie cookie = ResponseCookie.from("token", "").maxAge(0).build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
+
         Result<Verification, Error> result = Result.success(new Verification(account.get().getStudent()));
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(result);
     }
 
     /**
