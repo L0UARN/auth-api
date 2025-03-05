@@ -14,6 +14,8 @@ docker compose up --build
 
 > Note: The next time you will need to start the service, you can omit the `--build` option, as you won't need to build the project a second time.
 
+You can use this file as a template for your own deployment. Remember to change the `AUTH_API_JWT_SECRET` environment variable, it contains the secret with which the tokens are signed!
+
 ## Endpoints
 
 ### Registration
