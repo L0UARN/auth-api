@@ -51,3 +51,10 @@ To make it so a token can not be used anymore, send a `DELETE` request to `/auth
 To delete a student account, you use the `/auth/unregister` route using the `DELETE` method. This route requires the `username` and `password` URL parameters to be set and be valid account credentials.
 
 On success, a message will be return to indicate that the account has been deleted.
+
+## Used in this project
+
+- This project has been built using **Spring Boot**.
+- Tokens are signed **JWT**s.
+- The account registry is a **MongoDB** database.
+- Expired tokens are stored in a **Redis** in-memory database.
