@@ -104,7 +104,7 @@ public class AuthController {
     }
 
     /**
-     * Logs in a user and returns a token.
+     * Logs in a user and sends back a token.
      *
      * @param credentials The user's credentials.
      * @return A response entity with a token if successful, or an error message if login fails.
@@ -128,10 +128,10 @@ public class AuthController {
     }
 
     /**
-     * Retrieves user information based on the provided token.
+     * Retrieves the user's student id based on the provided token.
      *
      * @param token The authentication token.
-     * @return A response entity with user verification details or an error message.
+     * @return A response entity with user's student id or an error message.
      */
     @GetMapping("/me")
     public ResponseEntity<Result<Verification, Error>> me(@RequestHeader(HttpHeaders.AUTHORIZATION) @Validated @NonNull String token) {

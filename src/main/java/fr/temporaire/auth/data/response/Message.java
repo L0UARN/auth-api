@@ -2,7 +2,7 @@ package fr.temporaire.auth.data.response;
 
 /**
  * Represents a message.
- * This class is used to encapsulate a message that can be returned in the response.
+ * This class is used to encapsulate a message that can be returned in an api response.
  */
 public class Message {
     private final String message;

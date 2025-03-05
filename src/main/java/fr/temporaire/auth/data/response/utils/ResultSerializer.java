@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
  */
 @JsonComponent
 public class ResultSerializer extends JsonSerializer<Result<?, ?>> {
-
     /**
      * Serializes the {@link Result} object.
      * If the operation was successful, it serializes the success data.

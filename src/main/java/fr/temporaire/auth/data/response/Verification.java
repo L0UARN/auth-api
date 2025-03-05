@@ -1,9 +1,7 @@
 package fr.temporaire.auth.data.response;
 
 /**
- * Represents the verification status.
- * This class is used to encapsulate the result of verifying a token, containing a flag indicating success
- * and the associated student identifier.
+ * Represents the verification status when a user requests a verification of their authentication token.
  */
 public class Verification {
     private final boolean ok;

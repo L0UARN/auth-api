@@ -2,7 +2,7 @@ package fr.temporaire.auth.data.response;
 
 /**
  * Represents an error message.
- * This class is used to encapsulate an error description that can be returned in the response.
+ * This class is used to encapsulate an error description that can be returned in an api response.
  */
 public class Error {
     private final String error;
