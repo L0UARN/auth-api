@@ -54,6 +54,8 @@ To delete a student account, you use the `/auth/unregister` route using the `DEL
 
 On success, a message will be return to indicate that the account has been deleted.
 
+> Note: this route will send a `Set-Cookie` header meant to erase the cookie named `token`.
+
 ## Used in this project
 
 - This project has been built using **Spring Boot**.
