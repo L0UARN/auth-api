@@ -1,0 +1,32 @@
+volumes:
+  auth-mongo-data:
+  auth-redis-data:
+
+services:
+  auth:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      AUTH_API_JWT_SECRET: SecretQuiSertASignerLesJwt
+    depends_on:
+      auth-mongo:
+        condition: service_started
+      auth-redis:
+        condition: service_started
+  auth-mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - auth-mongo-data:/data/db
+  auth-redis:
+    image: redis
+    command: redis-server --save 60 1 --requirepass root
+    ports:
+      - "6379:6379"
+    volumes:
+      - auth-redis-data:/data
