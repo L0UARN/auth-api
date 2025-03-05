@@ -1,22 +1,41 @@
 package fr.temporaire.auth.controller;
 
-import fr.temporaire.auth.data.model.Account;
-import fr.temporaire.auth.data.request.CredentialsDto;
-import fr.temporaire.auth.data.request.RegisterDto;
-import fr.temporaire.auth.data.response.*;
-import fr.temporaire.auth.data.response.Error;
-import fr.temporaire.auth.data.response.utils.Result;
-import fr.temporaire.auth.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
 import java.time.Duration;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpCookie;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import fr.temporaire.auth.data.model.Account;
+import fr.temporaire.auth.data.request.CredentialsDto;
+import fr.temporaire.auth.data.request.RegisterDto;
+import fr.temporaire.auth.data.response.Error;
+import fr.temporaire.auth.data.response.Message;
+import fr.temporaire.auth.data.response.Token;
+import fr.temporaire.auth.data.response.Verification;
+import fr.temporaire.auth.data.response.utils.Result;
+import fr.temporaire.auth.service.AuthService;
+
+/**
+ * Controller for authentication and authorization.
+ */
 @CrossOrigin(
         origins = {"*"},
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE},
@@ -28,11 +47,22 @@ import java.util.Optional;
 public class AuthController {
     private final AuthService authService;
 
+    /**
+     * Constructs an AuthController with the specified AuthService.
+     *
+     * @param authService The authentication service.
+     */
     @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
+    /**
+     * Registers a new user.
+     *
+     * @param registerRequest The registration request containing user details.
+     * @return A response entity with a token if successful, or an error message if registration fails.
+     */
     @PostMapping("/register")
     public ResponseEntity<Result<Token, Error>> register(@Validated @RequestBody RegisterDto registerRequest) {
         if (authService.usernameIsRegistered(registerRequest.getUsername())) {
@@ -53,6 +83,12 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * Unregisters a user.
+     *
+     * @param credentials The user's credentials.
+     * @return A response entity indicating whether the unregistration was successful or not.
+     */
     @DeleteMapping("/unregister")
     public ResponseEntity<Result<Message, Error>> unregister(@Validated @ModelAttribute CredentialsDto credentials) {
         Optional<Account> account = authService.validateCredentials(credentials);
@@ -67,6 +103,12 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * Logs in a user and returns a token.
+     *
+     * @param credentials The user's credentials.
+     * @return A response entity with a token if successful, or an error message if login fails.
+     */
     @PostMapping("/login")
     public ResponseEntity<Result<Token, Error>> dummyToken(@Validated @RequestBody CredentialsDto credentials) {
         Optional<Account> account = authService.validateCredentials(credentials);
@@ -85,6 +127,12 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(result);
     }
 
+    /**
+     * Retrieves user information based on the provided token.
+     *
+     * @param token The authentication token.
+     * @return A response entity with user verification details or an error message.
+     */
     @GetMapping("/me")
     public ResponseEntity<Result<Verification, Error>> me(@RequestHeader(HttpHeaders.AUTHORIZATION) @Validated @NonNull String token) {
         Optional<Account> account = authService.verifyToken(token);
@@ -97,6 +145,12 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * Logs out a user by expiring their token.
+     *
+     * @param token The authentication token (nullable).
+     * @return A response entity confirming logout.
+     */
     @DeleteMapping("/logout")
     public ResponseEntity<Message> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) @Nullable String token) {
         if (token == null) {
