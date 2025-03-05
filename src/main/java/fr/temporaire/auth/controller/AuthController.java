@@ -109,6 +109,6 @@ public class AuthController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
 
-        return ResponseEntity.ok().headers(headers).body(null);
+        return ResponseEntity.ok().headers(headers).body(new Message("Logged out!"));
     }
 }
